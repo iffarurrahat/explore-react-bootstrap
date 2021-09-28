@@ -1,45 +1,31 @@
 import logo from './logo.svg';
 import './App.css';
-import Card from './component/Card/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { ButtonGroup, Button, Spinner, Row, Col, Card } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import News from './components/News/News';
 
 function App() {
-  const items = [
-    {
-      name: 'first items',
-      describstion:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate illum, eveniet autem nobis distinctio suscipit.',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Shaheed_Minar.JPG/240px-Shaheed_Minar.JPG',
-    },
-    {
-      name: 'first items',
-      describstion:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate illum, eveniet autem nobis distinctio suscipit.',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Shaheed_Minar.JPG/240px-Shaheed_Minar.JPG',
-    },
-    {
-      name: 'first items',
-      describstion:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate illum, eveniet autem nobis distinctio suscipit.',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Shaheed_Minar.JPG/240px-Shaheed_Minar.JPG',
-    },
-    {
-      name: 'first items',
-      describstion:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate illum, eveniet autem nobis distinctio suscipit.',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Shaheed_Minar.JPG/240px-Shaheed_Minar.JPG',
-    },
-    {
-      name: 'first items',
-      describstion:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate illum, eveniet autem nobis distinctio suscipit.',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Shaheed_Minar.JPG/240px-Shaheed_Minar.JPG',
-    },
-  ];
+  const [news, setNews] = useState([]);
+  useEffect(() => {
+    fetch(
+      'https://newsapi.org/v2/everything?q=tesla&from=2021-08-28&sortBy=publishedAt&apiKey=fe51c3ea66184a7e81cb87011f170a8b'
+    )
+      .then(res => res.json())
+      .then(data => setNews(data.articles));
+  }, []);
   return (
-    <div className="row row-cols-1 row-cols-md-4 g-4">
-      {items.map(item => (
-        <Card item={item}></Card>
-      ))}
+    <div className="App">
+      {news.length === 0 ? (
+        <Spinner animation="border" />
+      ) : (
+        <Row xs={1} md={3} className="g-4">
+          {news.map(nw => (
+            <News news={nw}></News>
+          ))}
+        </Row>
+      )}
     </div>
   );
 }
